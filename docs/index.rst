@@ -1,15 +1,16 @@
-.. emulator_utils documentation master file, created by
-   sphinx-quickstart on Tue Apr 12 14:56:42 2022.
+.. Emulator Utilities documentation master file, created by
+   sphinx-quickstart on Tue Apr 12 15:15:30 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to emulator_utils's documentation!
-==========================================
+Welcome to Emulator Utilities's documentation!
+==============================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   readme
 
 
 Indices and tables
