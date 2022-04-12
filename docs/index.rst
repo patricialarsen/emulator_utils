@@ -11,6 +11,11 @@ Welcome to Emulator Utilities's documentation!
    :caption: Contents:
 
    readme
+   read_data
+   precompute_quantities
+   pre_process
+   smoothing
+   linear_theory
 
 
 Indices and tables
