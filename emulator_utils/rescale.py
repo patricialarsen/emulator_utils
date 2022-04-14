@@ -1,22 +1,16 @@
-#!/usr/bin/env python
-# coding: utf-8
-##### Generic packages ###############
+"""
+rescale.py
+==============
 
+Rescaling functions
+
+"""
 import numpy as np
 
-# functions in module
-#
-# rescaleMinMax
-# scaleMinMax
-# unscaleMinMax
-# rescale01
-# scale01
-# unscale
-
-
 def rescaleMinMax(f):
-    '''
+    """
     Scale values to a unitary range
+
     Params
     ------
     f: ndarray(ndarray(float))
@@ -29,7 +23,8 @@ def rescaleMinMax(f):
        maximum f values for range (size of ell_values)
     fscaled: ndarray(ndarray(float))
        scaled f values (0 for minimum value, 1 for maximum value)
-    '''
+
+    """
 
     fmin = np.min(f,axis=0)
     fmax = np.max(f,axis=0)
