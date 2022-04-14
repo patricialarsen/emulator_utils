@@ -15,7 +15,9 @@ Welcome to Emulator Utilities's documentation!
    precompute_quantities
    pre_process
    smoothing
+   rescale
    linear_theory
+
 
 
 Indices and tables
