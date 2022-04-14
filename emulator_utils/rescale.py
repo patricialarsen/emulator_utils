@@ -35,6 +35,7 @@ def rescaleMinMax(f):
 def scaleMinMax(fmin, fmax, f):
     '''
     Scale values to a unitary range, given known bounds
+
     Params
     ------
     fmin: ndarray(float)
@@ -43,10 +44,12 @@ def scaleMinMax(fmin, fmax, f):
        maximum f values (size of ell_values)
     f: ndarray(ndarray(float))
        input values to rescale. Expect size of num_evals x ell_values
+
     Returns
     -------
     fscaled: ndarray(ndarray(float))
        scaled f values (0 for minimum value, 1 for maximum value)
+
     '''
     return (f - fmin) / (fmax - fmin)
 
@@ -72,7 +75,7 @@ def unscaleMinMax(fmin, fmax, f):
 
 
 def rescale01(f):
-    '''
+    """
     Scale values to a mean of zero and standard deviation of 1
     Params
     ------
@@ -86,7 +89,7 @@ def rescale01(f):
        standard deviation of f values  (size of ell_values)
     fscaled: ndarray(ndarray(float))
        scaled f values
-    '''
+    """
     fmean = np.mean(f,axis=0)
     fstd = np.std(f,axis=0)
     fscale = (f-fmean)/fstd
