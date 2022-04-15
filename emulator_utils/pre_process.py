@@ -10,7 +10,7 @@ from sklearn.preprocessing import FunctionTransformer
 from sklearn.pipeline import Pipeline
 
 
-__all__ = ("minmax", "standard", "standard_minmax", "log_standard", "unscale", "custom")
+__all__ = ("minmax", "standard", "standard_minmax", "log_standard", "unscale", "custom", )
 
 
 def minmax(data1d_batch):
@@ -30,10 +30,10 @@ def minmax(data1d_batch):
     unit variance scaling.
 
     """
-    scaler_function = MinMaxScaler(feature_range=(0, 1))
+    scaler = MinMaxScaler(feature_range=(0, 1))
     scaled_data = scaler.fit_transform(data1d_batch)
     
-    return scaled_data, scaler_function
+    return scaled_data, scaler
 
 
 
@@ -57,10 +57,10 @@ def standard(data1d_batch):
 
     """
 
-    scaler_function = StandardScaler(with_mean=False)
+    scaler = StandardScaler(with_mean=False)
     scaled_data = scaler.fit_transform(data1d_batch)
 
-    return scaled_data, scaler_function
+    return scaled_data, scaler
 
 
 def standard_minmax(data1d_batch):
@@ -75,7 +75,7 @@ def standard_minmax(data1d_batch):
         ])
     scaled_data = scaler.fit_transform(data1d_batch)
 
-    return scaled_data, scaler_function
+    return scaled_data, scaler
 
 
 def _log_transform(data):
@@ -91,7 +91,7 @@ def log_standard(data1d_batch):
     Apply log10 first, and then standardize the data.
 
     """
-    transformer = FunctionTransformer(func = _log_tranform, inverse_func = _inv_log_transform, validate=True, check_inverse = True)
+    transformer = FunctionTransformer(func = _log_transform, inverse_func = _inv_log_transform, validate=True, check_inverse = True)
 
     #scaled_data = transormfer.fit_transform(data1d_batch) # for log-only. 
 
@@ -101,7 +101,7 @@ def log_standard(data1d_batch):
         ])
 
     scaled_data = scaler.fit_transform(data1d_batch)
-    return scaled_data, transformer
+    return scaled_data, scaler
 
 
 def custom(data1d_batch, function, inverse_function):
