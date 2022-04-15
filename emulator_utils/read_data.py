@@ -13,7 +13,7 @@ def readpowerspec(path):
 
     Parameters
     ----------
-    path: float
+    path: str
        absolute path of power spectrum file
 
     Returns
@@ -37,8 +37,8 @@ def readcorr(path):
 
     Parameters
     ----------
-    path: float
-       absolute path of correlation function file
+    path: str
+        absolute path of correlation function file
 
     Returns
     -------
@@ -56,3 +56,24 @@ def readcorr(path):
     """
     file_in = np.loadtxt(path, skiprows=1)
     return file_in[:,0], file_in[:,1], file_in[:,2], file_in[:,3], file_in[:,5]
+
+def readpolspice(path):
+    """
+    Read in C_ell values from polspice outputs
+    Currently does not support polarization inputs
+
+    Parameters
+    -----------
+    path: str
+        absolute path of polspice outputs
+
+    Returns
+    -------
+    ell: ndarray(float)
+        spherical harmonic multipole 
+    C: ndarray(float)
+        spherical harmonic power
+    
+    """
+    file_in = np.loadtxt(path, skiprows=1)
+    return file_in[:,0], file_in[:,1]
