@@ -11,7 +11,7 @@ setup(
     packages=['emulator_utils'],
     install_requires=[
                       'numpy', 
-                      'pygio',
+                      'scikit-learn',
                       ],
 
     classifiers=[
