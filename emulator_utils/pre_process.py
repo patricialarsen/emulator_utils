@@ -10,26 +10,7 @@ from sklearn.preprocessing import FunctionTransformer
 from sklearn.pipeline import Pipeline
 
 
-__all__ = ("scale01", "minmax", "standard", "minmax_standard", "log_standard", "custom")
-
-
-def scale01(data1d_batch):
-
-    """
-    Returns a standardized rescaling of the input values.
-     by mean and variance of the training scheme
-    Parameters
-    ----------
-    f: ndarray of shape (n, )
-
-    Returns
-    _______
-    f_rescaled: ndarray of shape (5, )
-        Rescaled Cosmological parameters
-    """
-    batch_mean = np.mean(data1d_batch, axis = 0)
-    batch_std = np.std(data1d_batch, axis = 0)
-    return (data1d_batch - batch_mean)/batch_std, batch_mean, batch_std
+__all__ = ("minmax", "standard", "standard_minmax", "log_standard", "unscale", "custom")
 
 
 def minmax(data1d_batch):
@@ -50,7 +31,7 @@ def minmax(data1d_batch):
 
     """
     scaler_function = MinMaxScaler(feature_range=(0, 1))
-    scaled_data = scaler.fit_transform(data1d_batch))
+    scaled_data = scaler.fit_transform(data1d_batch)
     
     return scaled_data, scaler_function
 
@@ -77,14 +58,22 @@ def standard(data1d_batch):
     """
 
     scaler_function = StandardScaler(with_mean=False)
-    scaled_data = scaler.fit_transform(data1d_batch))
+    scaled_data = scaler.fit_transform(data1d_batch)
 
     return scaled_data, scaler_function
 
 
-def minmax_standard(data1d_batch):
-    scaler = Pipeline([('stdscaler', StandardScaler()), ('minmax', MinMaxScaler(feature_range=(0, 1)))])
-    scaled_data = scaler.fit_transform(data1d_batch))
+def standard_minmax(data1d_batch):
+    """
+
+    Apply Standardization first, then a min-max scaling between 0 and 1.
+
+    """
+    scaler = Pipeline([
+        ('stdscaler', StandardScaler()), 
+        ('minmax', MinMaxScaler(feature_range=(0, 1)))
+        ])
+    scaled_data = scaler.fit_transform(data1d_batch)
 
     return scaled_data, scaler_function
 
@@ -97,11 +86,57 @@ def _inv_log_transform(data):
 
 
 def log_standard(data1d_batch):
-    transformer = FunctionTransformer(func = _log_tranform, inverse_func = inverse_func)
-    scaled_data = transormfer.fit_transform(data1d_batch))
+    """
+
+    Apply log10 first, and then standardize the data.
+
+    """
+    transformer = FunctionTransformer(func = _log_tranform, inverse_func = _inv_log_transform, validate=True, check_inverse = True)
+
+    #scaled_data = transormfer.fit_transform(data1d_batch) # for log-only. 
+
+    scaler = Pipeline([
+        ('log', transformer),
+        ('stdscaler', StandardScaler())
+        ])
+
+    scaled_data = scaler.fit_transform(data1d_batch)
     return scaled_data, transformer
 
 
-def custom(data1d_batch, function):
+def custom(data1d_batch, function, inverse_function):
+    """
+    Follow the steps in log_standard transformer
+    """
     return NotImplemented
+
+def unscale(scaled_data, scaler):
+
+    """
+    Takes processed data to the original raw format
+
+    """
+    unscaled_data = scaler.inverse_transform(scaled_data)
+    return unscaled_data
+
+
+
+def _scale01(data1d_batch):
+
+    """
+    Returns a standardized rescaling of the input values.
+     by mean and variance of the training scheme
+    Parameters
+    ----------
+    f: ndarray of shape (n, )
+
+    Returns
+    _______
+    f_rescaled: ndarray of shape (5, )
+        Rescaled Cosmological parameters
+    """
+    batch_mean = np.mean(data1d_batch, axis = 0)
+    batch_std = np.std(data1d_batch, axis = 0)
+    return (data1d_batch - batch_mean)/batch_std, batch_mean, batch_std
+
 
