@@ -1,3 +1,9 @@
+"""
+explainer.py
+============
+something
+
+"""
 from alibi.explainers import KernelShap
 from alibi.explainers import IntegratedGradients
 from alibi.explainers import ALE
@@ -9,7 +15,32 @@ import shap
 #shap.initjs()
 
 def local_explainer(model, training_data, test_data, input_names, output_names):
+    """
+    local explainer 
 
+    Parameters
+    ----------
+    model: float
+        explanation
+    training_data: float
+        explanation
+    test_data: float
+        explanation
+    input_names: float
+        explanation
+    output_names: float
+        explanation
+        
+    Returns
+    -------
+    p1: float
+        explanation
+    p2: float
+        explanation
+    p3: float
+        explanation
+
+    """
     predictor = model.predict
     
     ex = shap.KernelExplainer( predictor, X_train, features = input_names)
@@ -33,7 +64,28 @@ def local_explainer(model, training_data, test_data, input_names, output_names):
 
 
 def global_explainer(model, training_data, test_data, input_names, output_names):
+    """
+    global explainer
 
+    Parameters
+    ----------
+    model: float
+        explain
+    training_data: float
+        explain
+    test_data: float
+        explain
+    input_names: float
+        explain
+    output_names: float
+        explain
+
+    Returns
+    -------
+    p1: float
+        explain
+
+    """
     ale = ALE(predictor, feature_names=input_names, target_names= target_names)
     ex = ale.explain(X_train)
 

@@ -1,8 +1,30 @@
+"""
+linear_theory_ccl.py
+====================
+Linear theory routines from ccl
+
+"""
+
 import pyccl
 import interp1d
 import numpy as np
 
 def get_ccl_cosmo(params,power):
+    """
+    gets ccl cosmology object 
+
+    Parameters
+    ----------
+    params: ndarray(ndarray(float))
+        parameter inputs 
+    power: str
+        power spectrum model
+
+    Returns
+    -------
+    cosmo: ccl cosmology object
+
+    """
     omegaM = params[0]
     omegaB = params[1]
     sigma8 = params[2]
@@ -17,8 +39,9 @@ def get_ccl_cosmo(params,power):
 
 
 def run_ccl_lin_pk(params, kvals, z):
-    '''
+    """
     Run the CCL linear matter power spectrum on given set of parameters
+
     Parameters
     ----------
     params: ndarray(float)
@@ -27,11 +50,13 @@ def run_ccl_lin_pk(params, kvals, z):
        k values (Mpc^-1)
     z: float
        redshift
+
     Returns
     -------
     linear: ndarray(float)
        P(k) values for linear matter power spectrum
-    '''
+
+    """
     omegaM = params[0]
     omegaB = params[1]
     sigma8 = params[2]
@@ -45,6 +70,26 @@ def run_ccl_lin_pk(params, kvals, z):
     return linear
 
 def weighted_func(halo,emu,num,kvals):
+    """
+    weighting function 
+
+    Parameters
+    ----------
+    halo: ndarray(float)
+        first input to weight
+    emu: ndarray(float)
+        second input to weight
+    num: int
+        number input to scaling
+    kvals: ndarray(float)
+        wavenumber input
+
+    Returns
+    -------
+    pow_t: ndarray(float)
+        weighted power
+
+    """
     weight1 = np.exp(-(kvals*num))
     weight2 = (1.-weight1)
     pow_t = halo*(weight2) + emu*(weight1)
@@ -55,6 +100,23 @@ def weighted_func(halo,emu,num,kvals):
 def linear_addition(k,pk,new_k,k_handover,params,z):
     """
     linear theory addition scaling linear theory to retain value at large scales
+    fix this
+
+    Parameters
+    ----------
+    halo: ndarray(float)
+        first input to weight
+    emu: ndarray(float)
+        second input to weight
+    num: int
+        number input to scaling
+    kvals: ndarray(float)
+        wavenumber input
+
+    Returns
+    -------
+    pow_t: ndarray(float)
+        weighted power
 
     """
     linear = run_ccl_lin_pk(params, new_k, z)
@@ -68,6 +130,23 @@ def linear_addition(k,pk,new_k,k_handover,params,z):
 def linear_addition_weighted(k,pk,new_k,k_handover,params,z):
     """
     linear theory addition using a weighted average of linear and measured solutions
+    fix this
+
+    Parameters
+    ----------
+    halo: ndarray(float)
+        first input to weight
+    emu: ndarray(float)
+        second input to weight
+    num: int
+        number input to scaling
+    kvals: ndarray(float)
+        wavenumber input
+
+    Returns
+    -------
+    pow_t: ndarray(float)
+        weighted power
 
     """
     linear = run_ccl_lin_pk(params, new_k, z)

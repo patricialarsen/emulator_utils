@@ -1,3 +1,9 @@
+"""
+linear_theory_camb.py
+=====================
+Linear theory functions for camb
+
+"""
 #
 # convenience functions for camb
 #
@@ -6,8 +12,9 @@ import numpy as np
 import camb
 
 def run_camb_lin_pk(params, kvals, z):
-    '''
+    """
     Run the CAMB linear matter power spectrum on given set of parameters
+
     Parameters
     ----------
     params: ndarray(float)
@@ -16,11 +23,13 @@ def run_camb_lin_pk(params, kvals, z):
        k values (Mpc^-1)
     z: float
        redshift
+
     Returns
     -------
     linear: ndarray(float)
        P(k) values for linear matter power spectrum
-    '''
+
+    """
     omegaM = params[0]
     omegaB = params[1]
     sigma8 = params[2]

@@ -1,5 +1,8 @@
 """
+load_model.py
+=============
 Loading pretrained GPflow, sklearn, tensorflow models
+
 """
 
 import numpy as np
@@ -17,11 +20,11 @@ _THIS_DRNAME = os.path.dirname(os.path.abspath(__file__))
 
 
 def gp_model_load(filename):
-    """Returns pretrained GP and PCA models (saved in ./models/) for given snapshot.
+    """
+    Returns pretrained GP and PCA models (saved in ./models/) for given snapshot.
 
     Parameters
     ----------
-
     snap_ID: int between 0 to 99
         Corresponds to different time stamps
 
@@ -29,10 +32,9 @@ def gp_model_load(filename):
         Number of truncated PCA bases. Only valid nRankMax for now is 6.
 
     Returns
-    _______
-
+    -------
     GPm: GPflow predictor object
-    PCAm: sklearn predictor object.
+    PCAm: sklearn predictor object
 
     """
 
@@ -46,24 +48,30 @@ def gp_model_load(filename):
 
 
 def sklearn_model_load(filename):
-    '''
+    """
     Only PCA available right now
 
     Parameters
-
-    Pickle file with trained PCA
+    ----------
+    filename: str
+        path to pickle file with trained PCA
 
     Returns
-    sklearn model object
+    -------
+    PCAm: sklearn model object
+        model 
 
-    '''
-
+    """
     PCAm = pickle.load(open(filename, 'rb'))
 
     return PCAm
 
 
 def tf_model_load(filename):
+    """
+    Not currently implemented
+
+    """
     return NotImplemented
 
 
