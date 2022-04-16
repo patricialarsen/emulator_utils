@@ -2,9 +2,13 @@ from sklearn.model_selection import train_test_split
 
 __all__ = ("random_holdout", "nonrandom_holdout", )
 
+
+
 def random_holdout(input_data, output_data, split_fraction):
     """
     Used for train-test splitting of data. The datapoints are randomly selection. 
+    
+    TO-DO: fix random seed?
 
     """
 
