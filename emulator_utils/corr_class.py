@@ -1,8 +1,8 @@
 import glob
 
-class PowerSpectrum:
+class CorrFunction:
     """ 
-    Class defining useful power spectrum routines 
+    Class defining useful correlation function routines 
 
     """
     def __init__(self):
@@ -12,14 +12,14 @@ class PowerSpectrum:
         if re.findall(r'\d+',file1)==[]:
             return 
         else:
-            return re.findall(r'\d+',file1)[-1]
+            return re.findall(r'\d+',file1)[1] # cosmology first
 
     @property 
     def file_list(self, direc):
         try:
             return self.file_list
         except:
-            file_list = glob.glob(direc+'/*.pk.*')
+            file_list = glob.glob(direc+'/*correlation*')
             assert(re.findall(r'\d+',direc)==[])
             while i<len(file_list):
                 if (re.findall(r'\d+',file_list[i])==[]):
@@ -38,32 +38,19 @@ class PowerSpectrum:
             self.steps = map(self.get_step_list_solo,self.file_list)
             return self.steps
         
+    @property
     def set_data(self):
-        from read_data import readpowerspec
-        k, pk, err, npairs = [read_powerspec(file_i) for file_i in self.file_list]
-        self.k = k 
-        self.pk = pk
-        self.err = err
-        self.npairs = npairs
+        from read_data import readcorr
+        rmin, rmax, corr, count, binsum,  = [read_corr(file_i) for file_i in self.file_list]
+        self.rmin = rmin
+        self.rmax = rmax
+        self.corr = corr
         return 
 
 
+    @property
     def set_conserved_quantities(self):
         ""
-        from precompute_quantities import pk_ratio
-        self.pk_ratio = pk_ratio(self.k,self.pk,self.steps)
+        from precompute_quantities import corr_ratio,
+        self.corr_ratio = corr_ratio(self.rmin,self.rmax,self.corr,self.steps)
 
-    def extend_k(self, lowk=True, highk=True):
-        """
-        extend low k using linear theory
-        extend high k using pade approximants
-
-        do this before pre-processing
-        """
-        return
-
-    def pre_process_power(self):
-        """
-        take the log value and then scale?
-        """ 
-        return 
