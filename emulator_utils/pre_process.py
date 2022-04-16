@@ -38,7 +38,6 @@ def minmax(data1d_batch):
 
 
 def standard(data1d_batch):
-
     """
     Standardize features by removing the mean and scaling to unit variance.
     
