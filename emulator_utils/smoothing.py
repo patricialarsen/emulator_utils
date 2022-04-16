@@ -1,17 +1,13 @@
-#!/bin/bash/python
-
-
 import numpy as np
-print('hello')
-
-def do_something():
-    """
-    Do literally anything
-    """
-    print(0)
-    return 
+import scipy.signal
 
 
+__all__ = ("savgol", "gaussian", )
 
-if __name__ =="__main__":
-    do_something()
+def savgol(data1d_array):
+    out1d = scipy.signal.savgol_filter(data1d_array, 35, 7)
+    return out1d
+
+def gaussian(data1d_array):
+    return NotImplemented
+
