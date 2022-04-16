@@ -8,7 +8,7 @@ class PowerSpectrum:
     def __init__(self):
         return 
         
-    def get_step_list_solo(self,file1)
+    def get_step_list_solo(self,file1):
         if re.findall(r'\d+',file1)==[]:
             return 
         else:
@@ -25,7 +25,7 @@ class PowerSpectrum:
                 if (re.findall(r'\d+',file_list[i])==[]):
                     file_list = file_list.delete(i)
                 else:
-                    i++
+                    i+=1
             self.file_list = file_list
             return file_list 
 
