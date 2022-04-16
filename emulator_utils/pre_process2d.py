@@ -1,9 +1,30 @@
+"""
+pre_process2d.py
+================
+Preprocessing routine for 2d data
+
+"""
+
 from PIL import Image
 import numpy as np
 
 __all__ = ("norm2d", "channel_RGB", )
 
 def norm2d(rgb):
+    """
+    normalize 2d data 
+
+    Parameters
+    ----------
+    rgb: float
+        something
+
+    Returns
+    -------
+    img_rgb: float
+        something
+
+    """
 
     scales, offset, Q, alpha, masklevel, saturation, itype = (0.9,1.1,1.5), 0.0, 20, 40.8, -1.0, 'color', 'rms'
 
@@ -26,6 +47,15 @@ def norm2d(rgb):
 
 
 class channel_RGB(object):
+    """
+    this is a class defining something. Note: add documentation for the rest of this
+    
+    Parameters
+    ----------
+    object: object
+        an object
+
+    """
     def __init__(self, RED=None, GREEN=None, BLUE=None, backsub=False):
         self.red   = RED
         self.green = GREEN
