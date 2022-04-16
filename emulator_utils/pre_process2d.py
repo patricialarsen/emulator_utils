@@ -1,6 +1,9 @@
 from PIL import Image
+import numpy as np
 
-def norm(rgb):
+__all__ = ("norm2d", "channel_RGB", )
+
+def norm2d(rgb):
 
     scales, offset, Q, alpha, masklevel, saturation, itype = (0.9,1.1,1.5), 0.0, 20, 40.8, -1.0, 'color', 'rms'
 
