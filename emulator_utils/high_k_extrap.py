@@ -114,7 +114,7 @@ def n_point_pade (x, p_c, q_c):
     return (np.poly1d(p_c)(x))/(np.poly1d(q_c)(x))
 
 
-def extend_pk(k,pk,k_pnts,k_new)
+def extend_pk(k,pk,k_pnts,k_new):
     """
     extend pk 
 

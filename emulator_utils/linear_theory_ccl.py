@@ -6,7 +6,7 @@ Linear theory routines from ccl
 """
 
 import pyccl
-import interp1d
+from scipy.interpolate import interp1d
 import numpy as np
 
 def get_ccl_cosmo(params,power):

@@ -4,6 +4,7 @@ explainer.py
 something
 
 """
+import alibi
 from alibi.explainers import KernelShap
 from alibi.explainers import IntegratedGradients
 from alibi.explainers import ALE

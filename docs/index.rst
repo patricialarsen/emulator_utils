@@ -11,12 +11,13 @@ Welcome to Emulator Utilities's documentation!
    :caption: Contents:
 
    readme
+   classes
    read_data
    precompute_quantities
    pre_process
-   smoothing
-   rescale
    linear_theory
+   extrap
+   emu
 
 
 
