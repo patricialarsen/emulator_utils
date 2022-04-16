@@ -18,11 +18,12 @@ def test_standard():
 def test_standard_minmax():
     scaled, _ = standard_minmax(test_data1d)
     assert np.all(np.isfinite(scaled))
-'''
+
+
 def test_log_standard():
-    scaled, _ = log_standard(test_data1d)
+    scaled, _ = log_standard(test_nonzero)
     assert np.all(np.isfinite(scaled))
-'''
+
 
 def test_unscale():
     scaled, scaler = log_standard(test_nonzero)
