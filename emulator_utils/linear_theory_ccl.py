@@ -1,6 +1,6 @@
 import pyccl
-
-vc = 2.998e5 #(km/s), speed of light
+import interp1d
+import numpy as np
 
 def get_ccl_cosmo(params,power):
     omegaM = params[0]
@@ -43,5 +43,37 @@ def run_ccl_lin_pk(params, kvals, z):
     cosmo = pyccl.Cosmology(transfer_function='boltzmann_camb', matter_power_spectrum='linear', Omega_c = omegaC, Omega_b = omegaB, h = h, n_s = n_s, sigma8 = sigma8)
     linear = pyccl.linear_matter_power(cosmo,kvals,1./(1.+z))
     return linear
+
+def weighted_func(halo,emu,num,kvals):
+    weight1 = np.exp(-(kvals*num))
+    weight2 = (1.-weight1)
+    pow_t = halo*(weight2) + emu*(weight1)
+    return pow_t
+
+
+
+def linear_addition(k,pk,new_k,k_handover,params,z):
+    """
+    linear theory addition scaling linear theory to retain value at large scales
+
+    """
+    linear = run_ccl_lin_pk(params, new_k, z)
+    pk_interp = interp1d(np.log10(k),np.log10(pk),bounds_error=False,fill_value=0.0)
+    pk_weighted = 10**(pk_interp(np.log10(new_k)))
+    mask_k = (new_k<k_handover[1])&(new_k>k_handover[0])
+    weight = np.mean(pk_weighted[mask_k])/np.mean(linear[mask_k])
+    k_swap = (k_handover[1]+k_handover[0])/2.
+    return linear*weight*(new_k<k_swap) + pk_weighted*(new_k>=k_swap)
+
+def linear_addition_weighted(k,pk,new_k,k_handover,params,z):
+    """
+    linear theory addition using a weighted average of linear and measured solutions
+
+    """
+    linear = run_ccl_lin_pk(params, new_k, z)
+    pk_interp = interp1d(np.log10(k),np.log10(pk),bounds_error=False,fill_value=0.0)
+    pk_weighted = 10**(pk_interp(np.log10(new_k)))
+    combination = weighted_func(linear,pk_weighted,1./k_handover,new_k)
+    return combination
 
 
