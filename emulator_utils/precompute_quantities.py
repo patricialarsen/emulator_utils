@@ -5,11 +5,16 @@ Pre-compute conserved quantities
 
 """
 
+import numpy as np
+
 def pk_ratio(k_vals,pk_vals,steps):
     nsteps = len(steps)
-    assert([k_vals[i]==k_vals[j] for i,j in range(nsteps)].all())
+    if len(k_vals)>1:
+        assert((k_vals[0]==k_vals[1]).all())
+    steps = np.array(steps).astype(int)
     base_step = np.max(steps)
     base_idx = np.where(steps==base_step)[0]
+    pk_vals = np.array(pk_vals)
     return pk_vals/pk_vals[base_idx]
 
 

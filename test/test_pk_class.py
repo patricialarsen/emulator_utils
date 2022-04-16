@@ -32,4 +32,13 @@ def test_data():
     powerspec.set_file_list(direc='test/data/powerspec_LJ')
     powerspec.set_steps()
     powerspec.set_data()
-    assert (powerspec.k!=None)
+    assert (len(powerspec.k)==73)
+
+def test_ratio():
+    powerspec = PowerSpectrum()
+    powerspec.set_file_list(direc='test/data/powerspec_LJ')
+    powerspec.set_steps()
+    powerspec.set_data()
+    ratio = powerspec.set_conserved_quantities()
+    assert (len(ratio)==73)
+

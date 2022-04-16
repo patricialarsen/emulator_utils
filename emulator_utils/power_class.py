@@ -52,8 +52,9 @@ class PowerSpectrum:
 
     def set_conserved_quantities(self):
         ""
-        from precompute_quantities import pk_ratio
+        from emulator_utils.precompute_quantities import pk_ratio
         self.pk_ratio = pk_ratio(self.k,self.pk,self.steps)
+        return self.pk_ratio
 
     def extend_k(self, lowk=True, highk=True):
         """
