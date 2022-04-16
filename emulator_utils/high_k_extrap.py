@@ -40,46 +40,25 @@ def n_point_pade (x, p_c, q_c):
     return (np.poly1d(p_c)(x))/(np.poly1d(q_c)(x))
 
 
-def pk_pl1(k, pk): #First Power Law scheme
-    intp=interpolate.interp1d(np.log(k[480:565]), np.log(pk[480:565]), kind='linear')
-    #print np.log(k[564])-np.log(k[521])
-    #print np.log(k[480])-np.log(k[521])
-    
-    tay_p=approximate_taylor_polynomial(intp, np.log(k[521]), 1, 0.2)
-    yo=(tay_p.c)[1]
-    y_prime=(tay_p.c)[0]
-    
-    A,n=solve(np.log(k[521]), yo, y_prime)
-    k_ext=np.linspace(8.5692+0.034, 250, 500)
-    pk_ext=A*k_ext**n
-    k_tmp=np.append(k, k_ext)
-    pk_tmp=np.append(pk, pk_ext)
-    return k_tmp, pk_tmp
+def extend_pk(k,pk,k_pnts,k_new)
+    npts = len(k_pts)
+    idx_arr = np.array([np.where(k==ktmp)[0] for ktmp in k_pnts])
+    pts = k[idx_arr]
+    rhs = pk[idx_arr]
+    # double check the 0,2 here - power level of the approximant
+    p,q = pade_coeffs(npts,0,2,pts,rhs)
+    kmax = np.max(k)
+    k_ext = k_new[k_new>kmax]
+    pk_ext = n_point_pade(k_ext, p, q)
+    pk_int = interp1d(np.log10(k),np.log10(pk))
+    pk_new = np.zeros_like(k_new)
+    pk_new[k_new<=kmax]=10**pk_int(np.log10(k_new[k_new<=kmax]))
+    pk_new[k_new>kmax] = pk_ext
+    return pk_new
     
 
-def pk_pl2(k, pk): #Second Power Law scheme
-    d=0.0
-    
-    for i in [x for x in range(518, 525) if x != 521]:
-        diff=(np.log(pk[521])-np.log(pk[i]))/(np.log(k[521])-np.log(k[i]))
-        d=d+diff
-
-    y_prime=d/6
-    y=np.log(pk[521])
-    A,n=solve(np.log(k[521]), y, y_prime)
-    k_ext=np.linspace(8.5692+0.034, 250, 500)
-    pk_ext=A*k_ext**n
-    k_tmp=np.append(k, k_ext)
-    pk_tmp=np.append(pk, pk_ext)
-    return k_tmp, pk_tmp
-    
-def solve(xo, y, y_diff):
-    n=y_diff
-    A=np.exp(y-(y_diff*xo))
-    return A,n
-
-
-def get_pk_array_emu(cosmo,file_list,min_k,nk):
+"""
+    def get_pk_array_emu(cosmo,file_list,min_k,nk):
     zl_array = []
     pk_array = []
     lk_array = []
@@ -90,9 +69,9 @@ def get_pk_array_emu(cosmo,file_list,min_k,nk):
         k_tmp,pk_tmp = np.loadtxt(filename, dtype="double", usecols=(0,1),unpack=True)
         pts=[k_tmp[480],k_tmp[521], k_tmp[564]]
         rhs=[pk_tmp[480],pk_tmp[521], pk_tmp[564]]
-        p,q=pade.pade_coeffs(3,0,2, pts, rhs)
+        p,q=pade_coeffs(3,0,2, pts, rhs)
         k_ext=np.linspace(8.5692+0.034, 250, 500)
-        pk_ext=pade.n_point_pade(k_ext, p, q)
+        pk_ext=n_point_pade(k_ext, p, q)
         k_tmp=np.append(k_tmp, k_ext)
         pk_tmp=np.append(pk_tmp, pk_ext)
         zl_tmp = np.double(file_list[i].split('_')[-5])
@@ -107,4 +86,4 @@ def get_pk_array_emu(cosmo,file_list,min_k,nk):
         lk_array.append(kfin)
         pk_array.append(pkfin)
     return zl_array,lk_array,pk_array
-
+"""
