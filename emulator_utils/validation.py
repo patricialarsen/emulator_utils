@@ -1,4 +1,6 @@
 """
+validation.py
+=============
 Validation metrics
 
 """
@@ -12,11 +14,31 @@ from sklearn.pipeline import Pipeline
 
 __all__ = ("pk_cross_3d", )
 
-
-
-
-
 def pk_cross_3d(dim, L, bin_dim, data1, data2):
+    """
+    Validate power spectrum of 3 dimensional data
+
+    Parameters
+    ----------
+    dim: int
+        number of frequency bins
+    L: float
+        box size
+    bin_dim: float
+        a value
+    data1: ndarray(float)
+        data to validate
+    data2: ndarray(float)
+        data to compare against 
+
+    Returns
+    -------
+    k_spec: ndarray(float)
+        k values output
+    power_spec: ndarray(float)
+        output power spectrum
+
+    """
 
     #dim = 128
     #bins = 30

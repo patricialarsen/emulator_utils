@@ -5,6 +5,26 @@ need to import pade libraries, so far this is what we were doing for the extensi
 
 import numpy as np
 from scipy.interpolate import*
+from numba import jit
+
+@jit(nopython=True)
+def numb_extrap1d(x, xs, ys):
+    ptr=0
+    y=x*0.0
+    for i in range(len(x)):
+        if x[i]<xs[0]:
+            y[i]=ys[0]+(x[i]-xs[0])*(ys[1]-ys[0])/(xs[1]-xs[0])
+        else:
+            while (ptr!=len(xs)) & (x[i]>=xs[ptr]):
+                ptr=ptr+1
+            if ptr==len(xs):
+                y[i]=ys[-1]+(x[i]-xs[-1])*(ys[-1]-ys[-2])/(xs[-1]-xs[-2])
+            else:
+                y[i]=ys[ptr]+ (x[i]-xs[ptr])*(ys[ptr]-ys[ptr-1])/(xs[ptr]-xs[ptr-1])
+
+    return y
+
+
 
 def pade_coeffs (n, l ,m ,xis, rhs): #n: number of points
     
@@ -57,33 +77,4 @@ def extend_pk(k,pk,k_pnts,k_new)
     return pk_new
     
 
-"""
-    def get_pk_array_emu(cosmo,file_list,min_k,nk):
-    zl_array = []
-    pk_array = []
-    lk_array = []
 
-    for i in range(len(file_list)):
-        # high k (small scale)
-        filename = file_list[i]
-        k_tmp,pk_tmp = np.loadtxt(filename, dtype="double", usecols=(0,1),unpack=True)
-        pts=[k_tmp[480],k_tmp[521], k_tmp[564]]
-        rhs=[pk_tmp[480],pk_tmp[521], pk_tmp[564]]
-        p,q=pade_coeffs(3,0,2, pts, rhs)
-        k_ext=np.linspace(8.5692+0.034, 250, 500)
-        pk_ext=n_point_pade(k_ext, p, q)
-        k_tmp=np.append(k_tmp, k_ext)
-        pk_tmp=np.append(pk_tmp, pk_ext)
-        zl_tmp = np.double(file_list[i].split('_')[-5])
-        dzl = np.double(file_list[i].split('_')[-4])
-
-        # large scales (small k)
-        k_lo = np.logspace(np.log10(min_k),np.log10(np.min(k_tmp)-1.e-5),nk)
-        linear = pyccl.linear_matter_power(cosmo,k_lo,1./(1.+zl_tmp))
-        kfin = np.concatenate((k_lo,k_tmp))
-        pkfin = np.concatenate((linear,pk_tmp))
-        zl_array.append(zl_tmp)
-        lk_array.append(kfin)
-        pk_array.append(pkfin)
-    return zl_array,lk_array,pk_array
-"""
