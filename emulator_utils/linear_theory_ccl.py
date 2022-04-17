@@ -152,7 +152,7 @@ def linear_addition_weighted(k,pk,new_k,k_handover,params,z):
     linear = run_ccl_lin_pk(params, new_k, z)
     pk_interp = interp1d(np.log10(k),np.log10(pk),bounds_error=False,fill_value=0.0)
     pk_weighted = 10**(pk_interp(np.log10(new_k)))
-    combination = weighted_func(linear,pk_weighted,1./k_handover,new_k)
+    combination = weighted_func(pk_weighted,linear,1./k_handover,new_k)
     return combination
 
 

@@ -54,9 +54,7 @@ class PowerSpectrum:
         while i<len(file_list):
             if (re.findall(r'\d+',file_list[i])[-1]=='000'):
                 file_list.pop(i)
-                print('deleted')
             else:
-                print(re.findall(r'\d+',file_list[i])[-1])
                 i+=1
         self.file_list = file_list
         return file_list 

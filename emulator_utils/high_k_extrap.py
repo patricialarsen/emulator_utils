@@ -135,11 +135,13 @@ def extend_pk(k,pk,k_pnts,k_new):
         extended power spectrum
 
     """
-    npts = len(k_pts)
-    idx_arr = np.array([np.where(k==ktmp)[0] for ktmp in k_pnts])
+    npts = len(k_pnts)
+    idx_arr = np.array([np.where(k>ktmp)[0][0] for ktmp in k_pnts])
+    print(idx_arr)
     pts = k[idx_arr]
     rhs = pk[idx_arr]
     # double check the 0,2 here - power level of the approximant
+    print(npts,pts,rhs)
     p,q = pade_coeffs(npts,0,2,pts,rhs)
     kmax = np.max(k)
     k_ext = k_new[k_new>kmax]
