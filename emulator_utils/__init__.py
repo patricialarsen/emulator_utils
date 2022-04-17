@@ -12,3 +12,4 @@ __credits__ = 'Argonne National Laboratory'
 from .pre_process import *
 from .split import *
 from .pre_process2d import *
+from .surrogates import *
