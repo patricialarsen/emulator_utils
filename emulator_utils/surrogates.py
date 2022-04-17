@@ -51,7 +51,7 @@ def train_mlp(model, train_data, train_target, validation_data, validation_targe
     K.set_value(model.optimizer.lr, learning_rate)
     K.set_value(model.optimizer.decay, decay_rate)
     
-    train_history = model.fit(train_data, train_target, epochs=num_epochs, batch_size=batch_size, verbose=0)
+    train_history = model.fit(train_data, train_target, epochs=num_epochs, batch_size=batch_size, verbose=1)
     # evaluate the model
     loss, acc = model.evaluate(validation_data, validation_target, verbose=1)
     print('Test Accuracy: %.3f' % acc)
