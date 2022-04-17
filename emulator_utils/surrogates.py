@@ -23,7 +23,7 @@ def simple_mlp(input_shape, output_shape, hidden_dims):
 
     model.add(Dense(hidden_dims[0], activation='relu', kernel_initializer='he_normal', input_shape=(input_shape,)))
     
-    for hidden_shape in hidden_dim[1:]:
+    for hidden_shape in hidden_dims[1:]:
         model.add(Dense(hidden_shape, activation='relu', kernel_initializer='he_normal'))
 
     model.add(Dense(output_shape, activation='linear'))
@@ -51,7 +51,7 @@ def train_mlp(model, train_data, train_target, validation_data, validation_targe
     K.set_value(model.optimizer.lr, learning_rate)
     K.set_value(model.optimizer.decay, decay_rate)
     
-    train_history = model.fit(train_data, train_target, epochs= num_epochs, batch_size=batch_size, verbose=0)
+    train_history = model.fit(train_data, train_target, epochs=num_epochs, batch_size=batch_size, verbose=0)
     # evaluate the model
     loss, acc = model.evaluate(validation_data, validation_target, verbose=1)
     print('Test Accuracy: %.3f' % acc)
@@ -59,7 +59,7 @@ def train_mlp(model, train_data, train_target, validation_data, validation_targe
 
     return model
 
-def save_mlp(fileout):
+def save_mlp(model, fileout):
 
     # save the model
     tf.keras.models.save_model(model, fileout, overwrite=True, include_optimizer=True, save_format=None, signatures=None, options=None)
