@@ -8,7 +8,7 @@ class CorrFunction:
     def __init__(self):
         return 
         
-    def get_step_list_solo(self,file1)
+    def get_step_list_solo(self,file1):
         if re.findall(r'\d+',file1)==[]:
             return 
         else:
