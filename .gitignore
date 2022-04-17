@@ -130,3 +130,5 @@ dmypy.json
 
 # Trained models
 test/models/*
+*.pb
+*variables.data*
