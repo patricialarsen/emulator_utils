@@ -27,10 +27,6 @@ def simple_mlp(input_shape, output_shape, hidden_dims):
         model.add(Dense(hidden_shape, activation='relu', kernel_initializer='he_normal'))
 
     model.add(Dense(output_shape, activation='linear'))
-
-    # compile the model
-    model.compile(optimizer='adam', loss='mse', metrics=['binary_crossentropy'])
-
     print(model.summary())
 
     return model
@@ -48,9 +44,14 @@ def train_mlp(model, train_data, train_target, validation_data, validation_targe
     fileout: full path to save the trained model
 
     '''
+
+    # compile the model
+    model.compile(optimizer='adam', loss='mse', metrics=['binary_crossentropy'])
+
     K.set_value(model.optimizer.lr, learning_rate)
     K.set_value(model.optimizer.decay, decay_rate)
-    
+
+
     train_history = model.fit(train_data, train_target, epochs=num_epochs, batch_size=batch_size, verbose=1, validation_data=(validation_data, validation_target))
     print('Training complete')
     # evaluate the model
