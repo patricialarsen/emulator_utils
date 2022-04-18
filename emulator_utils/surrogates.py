@@ -15,21 +15,21 @@ def simple_mlp(input_shape, output_shape, hidden_dims):
     output_shape: integer
     hidden dim: numpy array with integers
 
-    TO-DO: add options for changing loss and optimizer
+    TO-DO: add options for changing loss, metrics, and optimizer
 
     '''
 
     model = Sequential()
 
     model.add(Dense(hidden_dims[0], activation='relu', kernel_initializer='he_normal', input_shape=(input_shape,)))
-    
+
     for hidden_shape in hidden_dims[1:]:
         model.add(Dense(hidden_shape, activation='relu', kernel_initializer='he_normal'))
 
     model.add(Dense(output_shape, activation='linear'))
 
     # compile the model
-    model.compile(optimizer='adam', loss='mse', metrics=['mean_squared_error'])
+    model.compile(optimizer='adam', loss='mse', metrics=['binary_crossentropy'])
 
     print(model.summary())
 
@@ -51,10 +51,11 @@ def train_mlp(model, train_data, train_target, validation_data, validation_targe
     K.set_value(model.optimizer.lr, learning_rate)
     K.set_value(model.optimizer.decay, decay_rate)
     
-    train_history = model.fit(train_data, train_target, epochs=num_epochs, batch_size=batch_size, verbose=1)
+    train_history = model.fit(train_data, train_target, epochs=num_epochs, batch_size=batch_size, verbose=1, validation_data=(validation_data, validation_target))
+    print('Training complete')
     # evaluate the model
     loss, acc = model.evaluate(validation_data, validation_target, verbose=1)
-    print('Test Accuracy: %.3f' % acc)
+    print('Test loss after training: %.3f' % loss)
     # save the model
 
     return model, train_history
