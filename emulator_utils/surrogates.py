@@ -57,7 +57,7 @@ def train_mlp(model, train_data, train_target, validation_data, validation_targe
     print('Test Accuracy: %.3f' % acc)
     # save the model
 
-    return model
+    return model, train_history
 
 def save_mlp(model, fileout):
 
