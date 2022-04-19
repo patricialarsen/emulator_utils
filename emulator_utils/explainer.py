@@ -13,8 +13,7 @@ from alibi.explainers import plot_ale
 
 import shap
 
-#shap.initjs()
-
+shap.initjs()
 
 
 __all__ = ("shap_estimate", "plot_shap_summary_single", "plot_shap_summary_multiple", "plot_shap_force_single", "plot_shap_force_multiple", )
