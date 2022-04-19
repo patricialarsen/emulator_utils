@@ -48,7 +48,7 @@ def plot_shap_force_multiple(expected_values, shap_values, input_names, output_n
     # predictor = model.predict
     # explainer = shap.KernelExplainer(predictor, training_data, features = input_names, out_names = output_names)
     # out_id = 0                                                                                                                                   
-    p4 = shap.force_plot(expected_value[out_id], shap_values[out_id], feature_names = input_names, out_names = output_names[out_id])  
+    p4 = shap.force_plot(expected_values[out_id], shap_values[out_id], feature_names = input_names, out_names = output_names[out_id])  
     return p4
 
 
