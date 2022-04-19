@@ -16,7 +16,7 @@ import shap
 shap.initjs()
 
 
-__all__ = ("shap_estimate", "plot_shap_summary_single", "plot_shap_summary_multiple", "plot_shap_force_single", "plot_shap_force_multiple", )
+__all__ = ("shap_estimate", "plot_shap_summary_single", "plot_shap_summary_multiple", "plot_shap_force_single", "plot_shap_force_multiple", "global_explainer", )
 
 #### local interpreters ######
 
@@ -41,17 +41,12 @@ def plot_shap_force_single(expected_values, shap_values, input_names, output_nam
     # predictor = model.predict
     # explainer = shap.KernelExplainer(predictor, training_data, features = input_names, out_names = output_names)
     p3 = shap.force_plot(expected_values[out_id], shap_values[out_id][test_id], feature_names = input_names, out_names = output_names[out_id])
-    return p3
 
 def plot_shap_force_multiple(expected_values, shap_values, input_names, output_names, out_id):
     # predictor = model.predict
     # explainer = shap.KernelExplainer(predictor, training_data, features = input_names, out_names = output_names)
     # out_id = 0                                                                                                                                   
     p4 = shap.force_plot(expected_values[out_id], shap_values[out_id], feature_names = input_names, out_names = output_names[out_id])  
-    return p4
-
-
-
 
 
 
@@ -59,7 +54,7 @@ def plot_shap_force_multiple(expected_values, shap_values, input_names, output_n
 
 def global_explainer(model, training_data, test_data, input_names, output_names):
     """
-    global explainer
+    global explaination using Accumulated Local explainer model
 
     Parameters
     ----------
@@ -80,12 +75,28 @@ def global_explainer(model, training_data, test_data, input_names, output_names)
         explain
 
     """
-    ale = ALE(predictor, feature_names=input_names, target_names= target_names)
-    ex = ale.explain(X_train)
+    predictor = model.predict
+    ale = ALE(predictor, feature_names=input_names, target_names=output_names)
+    explainer = ale.explain(training_data)
 
-    p1 = plot_ale(ex, features=input_names, ax = ax, sharey=True, constant=False)
 
-    return p1
+    if (input_names.shape[0] > 0):
+
+        fig, ax = plt.subplots(1, input_names.shape[0], figsize=(4*input_names.shape[0], 3.5), sharey=True)
+        
+        for axis_ind in range(input_names.shape[0]):
+            ax[axis_ind].set_xlabel(input_names[axis_ind], fontsize=18)
+        
+        ax[axis_ind].set_ylabel(ALE, fontsize=18)
+
+        p5 = plot_ale(explainer, features=input_names, ax = ax, sharey=True, constant=False)
+
+
+    else:
+
+        p5 = plot_ale(explainer, features=input_names, constant=False)
+
+    return ale, p5
 
 
 
