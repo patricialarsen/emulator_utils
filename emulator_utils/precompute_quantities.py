@@ -54,15 +54,15 @@ def corr_ratio(r_min, r_max, corr_vals, steps):
     Returns
     -------
     ratio: ndarray(float)
-        power spectrum ratio with respect to the final redshift
-
+        correlation function ratio with respect to the final redshift
 
     """
     nsteps = len(steps)
-    assert([r_min[i]==r_min[j] for i,j in range(nsteps)].all())
-    assert([r_max[i]==r_max[j] for i,j in range(nsteps)].all())
+    if len(k_vals)>1:
+        assert((r_min[0]==r_min[1]).all())
+    steps = np.array(steps).astype(int)
     base_step = np.max(steps)
     base_idx = np.where(steps==base_step)[0]
+    corr_vals = np.array(corr_vals)
     return corr_vals/corr_vals[base_idx]
-
 
