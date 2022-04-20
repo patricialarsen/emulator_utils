@@ -155,4 +155,34 @@ def linear_addition_weighted(k,pk,new_k,k_handover,params,z):
     combination = weighted_func(pk_weighted,linear,1./k_handover,new_k)
     return combination
 
+def run_ccl_halofit_pk(params, kvals, z):
+    """
+    Run the CCL halofit non-linear matter power spectrum on given set of parameters
+
+    Parameters
+    ----------
+    params: ndarray(float)
+       parameters to compute power spectrum
+    kvals: ndarray(float)
+       k values (Mpc^-1)
+    z: float
+       redshift
+
+    Returns
+    -------
+    nonlinear: ndarray(float)
+       P(k) values for halofit non-linear matter power spectrum
+
+    """
+    omegaM = params[0]
+    omegaB = params[1]
+    sigma8 = params[2]
+    h = params[3]
+    n_s = params[4]
+    omegaM = omegaM/h**2
+    omegaB = omegaB/h**2
+    omegaC = omegaM-omegaB
+    cosmo = pyccl.Cosmology(transfer_function='boltzmann_camb', matter_power_spectrum='halofit', Omega_c = omegaC, Omega_b = omegaB, h = h, n_s = n_s, sigma8 = sigma8)
+    nonlinear = pyccl.nonlin_matter_power(cosmo,kvals,1./(1.+z))
+    return nonlinear
 
