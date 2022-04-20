@@ -1,5 +1,5 @@
 """
-explainer.py
+explainers.py
 ============
 something
 
@@ -10,6 +10,7 @@ from alibi.explainers import KernelShap
 from alibi.explainers import IntegratedGradients
 from alibi.explainers import ALE
 from alibi.explainers import plot_ale
+import matplotlib.pylab as plt
 
 import shap
 
@@ -41,12 +42,15 @@ def plot_shap_force_single(expected_values, shap_values, input_names, output_nam
     # predictor = model.predict
     # explainer = shap.KernelExplainer(predictor, training_data, features = input_names, out_names = output_names)
     p3 = shap.force_plot(expected_values[out_id], shap_values[out_id][test_id], feature_names = input_names, out_names = output_names[out_id])
+    return p3
 
 def plot_shap_force_multiple(expected_values, shap_values, input_names, output_names, out_id):
     # predictor = model.predict
     # explainer = shap.KernelExplainer(predictor, training_data, features = input_names, out_names = output_names)
     # out_id = 0                                                                                                                                   
-    p4 = shap.force_plot(expected_values[out_id], shap_values[out_id], feature_names = input_names, out_names = output_names[out_id])  
+    p4 = shap.force_plot(expected_values[out_id], shap_values[out_id], feature_names = input_names, out_names = output_names[out_id])
+    return p4
+
 
 
 
@@ -80,11 +84,11 @@ def global_explainer(model, training_data, test_data, input_names, output_names)
     explainer = ale.explain(training_data)
 
 
-    if (input_names.shape[0] > 0):
+    if (len(input_names)> 1):
 
-        fig, ax = plt.subplots(1, input_names.shape[0], figsize=(4*input_names.shape[0], 3.5), sharey=True)
+        fig, ax = plt.subplots(1, len(input_names), figsize=(4*len(input_names), 3.5), sharey=True)
         
-        for axis_ind in range(input_names.shape[0]):
+        for axis_ind in range( len(input_names)):
             ax[axis_ind].set_xlabel(input_names[axis_ind], fontsize=18)
         
         ax[axis_ind].set_ylabel(ALE, fontsize=18)
