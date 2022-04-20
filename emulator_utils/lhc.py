@@ -5,7 +5,7 @@ Latin hypercube functions
 
 """
 
-import pyDOE
+import pyDOE2 as pyDOE
 import numpy as np
 
 def create_lhc(AllPara, num_evals, output_dir):
