@@ -18,13 +18,17 @@ def simple_mlp(input_shape, output_shape, hidden_dims):
     TO-DO: add options for changing loss, metrics, and optimizer
 
     '''
+    p_dropout = 0.2
 
     model = Sequential()
 
     model.add(Dense(hidden_dims[0], activation='relu', kernel_initializer='he_normal', input_shape=(input_shape,)))
+    model.add(Dropout(p_dropout))
 
     for hidden_shape in hidden_dims[1:]:
         model.add(Dense(hidden_shape, activation='relu', kernel_initializer='he_normal'))
+        model.add(Dropout(p_dropout))
+
 
     model.add(Dense(output_shape, activation='linear'))
     print(model.summary())
