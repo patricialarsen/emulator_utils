@@ -3,10 +3,14 @@ from keras.models import Model
 from tensorflow.keras.layers import Dense, Conv1D, Activation, Dropout, Flatten, Input
 import tensorflow as tf
 from tensorflow.keras import backend as K
+from tensorflow.keras.models import Model
+import numpy as np
+from .pre_process import unscale
+
 tf.random.set_seed(3)
 
 
-__all__ = ("simple_mlp", "train_mlp", "save_mlp", "load_mlp", "train_pca", "save_pca", "load_pca", )
+__all__ = ("simple_mlp", "train_mlp", "save_mlp", "load_mlp", "train_pca", "save_pca", "load_pca", "mcdrop_pred", )
 
 def simple_mlp(input_shape, output_shape, hidden_dims):
     '''
@@ -18,7 +22,7 @@ def simple_mlp(input_shape, output_shape, hidden_dims):
     TO-DO: add options for changing loss, metrics, and optimizer
 
     '''
-    p_dropout = 0.2
+    p_dropout = 0.1
 
     model = Sequential()
 
@@ -77,6 +81,20 @@ def load_mlp(fileout):
     # load a trained model
     model = tf.keras.models.load_model(fileout)
     return model
+
+
+def mcdrop_pred(model, input_params_scaled, scaler_out):
+    mc_samples = 100
+    partial_model = Model(model.layers[0].input, model.output)
+
+    ## Draw MC samples 
+    Yt_hat = np.array([unscale(partial_model(input_params_scaled, training=True), scaler_out) for _ in range(mc_samples)])
+    
+    y_mean = np.mean(Yt_hat, axis=0)
+    y_std = np.std(Yt_hat, axis=0)
+    
+    return Yt_hat, y_mean, y_std
+
 
 
 #####################################################
