@@ -13,7 +13,7 @@ from sklearn.pipeline import Pipeline
 from pickle import dump, load
 
 
-__all__ = ("minmax", "standard", "standard_minmax", "log_standard", "unscale", "custom", )
+__all__ = ("minmax", "standard", "standard_minmax", "log_standard", "unscale", "custom", "save_scaler", "load_scaler", )
 
 
 def minmax(data1d_batch):

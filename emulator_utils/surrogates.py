@@ -10,7 +10,7 @@ from .pre_process import unscale
 tf.random.set_seed(3)
 
 
-__all__ = ("simple_mlp", "train_mlp", "save_mlp", "load_mlp", "train_pca", "save_pca", "load_pca", "mcdrop_pred", )
+__all__ = ("simple_mlp", "train_mlp", "save_mlp", "load_mlp", "train_pca", "save_pca", "load_pca", "mcdrop_pred", "mean_pred", )
 
 def simple_mlp(input_shape, output_shape, hidden_dims):
     '''
@@ -74,28 +74,40 @@ def save_mlp(model, fileout):
     # save the model
     tf.keras.models.save_model(model, fileout, overwrite=True, include_optimizer=True, save_format=None, signatures=None, options=None)
 
-    print('Model saved at'+fileout)
+    print('Model saved at: '+fileout)
 
 def load_mlp(fileout):
+    
+    print('Model loaded from: '+fileout)
 
     # load a trained model
     model = tf.keras.models.load_model(fileout)
     return model
 
 
-def mcdrop_pred(model, input_params_scaled, scaler_out):
-    mc_samples = 100
+def mcdrop_pred(param_in_unscaled, model, scaler_in, scaler_out):
+    num_mc_samples = 100
     partial_model = Model(model.layers[0].input, model.output)
+    
+    input_params_scaled = scaler_in.transform(param_in_unscaled)
 
     ## Draw MC samples 
-    Yt_hat = np.array([unscale(partial_model(input_params_scaled, training=True), scaler_out) for _ in range(mc_samples)])
+    Yt_hat_unscaled = np.array([unscale(partial_model(input_params_scaled, training=True), scaler_out) for _ in range(num_mc_samples)])
     
-    y_mean = np.mean(Yt_hat, axis=0)
-    y_std = np.std(Yt_hat, axis=0)
+    y_mean_unscaled = np.mean(Yt_hat_unscaled, axis=0)
+    y_std_unscaled = np.std(Yt_hat_unscaled, axis=0)
     
-    return Yt_hat, y_mean, y_std
+    return Yt_hat_unscaled, y_mean_unscaled, y_std_unscaled
 
 
+def mean_pred(model, param_in_unscaled, scaler_in, scaler_out):
+    
+    input_params_scaled = scaler_in.transform(param_in_unscaled)
+
+    y_mean_scaled = model.predict(input_params_scaled)
+    y_mean_unscaled = unscale(y_mean_scaled, scaler_out)
+        
+    return y_mean_unscaled
 
 #####################################################
 
@@ -141,7 +153,7 @@ def save_pca(model, fileout):
 
     pickle.dump(pca_model, open(fileout, 'wb'))
 
-    print('Model saved at'+fileout)
+    print('Model saved at: '+fileout)
 
 def load_pca(fileout):
     model = pickle.load(open(fileout, 'rb'))
