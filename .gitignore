@@ -132,3 +132,5 @@ dmypy.json
 test/models/*
 *.pb
 *variables.data*
+.index
+.pkl
