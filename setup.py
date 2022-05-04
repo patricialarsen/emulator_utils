@@ -12,6 +12,7 @@ setup(
     install_requires=[
                       'numpy', 
                       'scikit-learn',
+                      'tensorflow', 
                       ],
 
     classifiers=[

@@ -6,6 +6,7 @@ Smoothing routines
 """
 import numpy as np
 import scipy.signal
+from scipy.ndimage import gaussian_filter
 
 
 __all__ = ("savgol", "gaussian", )
@@ -30,7 +31,9 @@ def savgol(data1d_array):
 
 def gaussian(data1d_array):
     """
-    Gaussian smmoothing. Currently not implemented
+    Gaussian smmoothing. 
     """
-    return NotImplemented
+    
+    out1d = gaussian_filter(data1d_array, sigma=1)
+    return out1d
 

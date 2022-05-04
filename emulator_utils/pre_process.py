@@ -10,9 +10,10 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.pipeline import Pipeline
+from pickle import dump, load
 
 
-__all__ = ("minmax", "standard", "standard_minmax", "log_standard", "unscale", "custom", )
+__all__ = ("minmax", "standard", "standard_minmax", "log_standard", "unscale", "custom", "save_scaler", "load_scaler", )
 
 
 def minmax(data1d_batch):
@@ -227,3 +228,13 @@ def _scale01(data1d_batch):
     return (data1d_batch - batch_mean)/batch_std, batch_mean, batch_std
 
 
+def save_scaler(scaler, filepath):
+    dump(scaler, open(filepath+'.pkl', 'wb'))
+    print('Saved the pre-processing pipeline at: ' + filepath +'.pkl')
+    
+def load_scaler(filepath):
+    print('Loading the pre-processing pipeline from: ' + filepath +'.pkl')
+    scaler = load(open(filepath+'.pkl', 'rb'))
+    return scaler
+    
+    

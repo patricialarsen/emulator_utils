@@ -38,7 +38,7 @@ def random_holdout(input_data, output_data, split_fraction):
 
     """
 
-    train_data, test_data, train_target, test_target = train_test_split(input_data, output_data, test_size=split_fraction)
+    train_data, test_data, train_target, test_target = train_test_split(input_data, output_data, test_size=split_fraction, random_state=1)
     return train_data, test_data, train_target, test_target
 
 def nonrandom_holdout():
